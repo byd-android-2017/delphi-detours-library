@@ -3,8 +3,9 @@ unit uMain;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, DDetours;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  DDetours;
 
 type
   TMain = class(TForm)
@@ -30,8 +31,7 @@ implementation
 {$R *.dfm}
 
 var
-  TrampolineGetSysColor: function(nIndex: Integer): DWORD;
-stdcall = nil;
+  TrampolineGetSysColor: function(nIndex: Integer): DWORD; stdcall = nil;
 
 function InterceptGetSysColor(nIndex: Integer): DWORD; stdcall;
 begin
@@ -41,16 +41,23 @@ begin
     Result := TrampolineGetSysColor(nIndex);
 end;
 
+procedure TMain.FormCreate(Sender: TObject);
+begin
+  Label1.Caption := 'GetSysColor not hooked.';
+end;
+
+{
+ Enable Hook
+}
 procedure TMain.BtnEnableHookClick(Sender: TObject);
 begin
   @TrampolineGetSysColor := InterceptCreate(@GetSysColor, @InterceptGetSysColor);
   Label1.Caption := 'GetSysColor is hooked.';
 end;
 
-procedure TMain.FormCreate(Sender: TObject);
-begin
-  Label1.Caption := 'GetSysColor not hooked.';
-end;
+{
+ Disable Hook
+}
 
 procedure TMain.BtnDisableHookClick(Sender: TObject);
 begin

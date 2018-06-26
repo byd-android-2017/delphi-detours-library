@@ -3,8 +3,9 @@ unit uMain;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, DDetours, Vcl.StdCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  DDetours;
 
 type
   TMyForm = class(TForm)
@@ -19,7 +20,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure BtnTestClick(Sender: TObject);
   private
-
     { Private declarations }
   public
     { Public declarations }
@@ -33,12 +33,8 @@ implementation
 {$R *.dfm}
 
 var
-  TrampolineGetMemory: function(Size: NativeInt): Pointer;
-cdecl = nil;
-
-var
-  TrampolineFreeMemory: function(P: Pointer): Integer;
-cdecl = nil;
+  TrampolineGetMemory: function(Size: NativeInt): Pointer; cdecl = nil;
+  TrampolineFreeMemory: function(P: Pointer): Integer; cdecl = nil;
 
 function GetMemory_Hooked(Size: NativeInt): Pointer; cdecl;
 begin
@@ -58,6 +54,23 @@ begin
   end;
 end;
 
+{ TMyForm }
+
+class constructor TMyForm.Create;
+begin
+  FInit := False;
+end;
+
+{
+\TMain
+}
+
+procedure TMain.FormCreate(Sender: TObject);
+begin
+  FInit := True;
+  MemLog.Clear;
+end;
+
 procedure TMain.BtnTestClick(Sender: TObject);
 var
   P: PByte;
@@ -67,27 +80,18 @@ begin
   MemLog.Lines.Add('---------------------------------');
 end;
 
-procedure TMain.FormCreate(Sender: TObject);
-begin
-  FInit := True;
-  MemLog.Clear;
-end;
-
-{ TMyForm }
-
-class constructor TMyForm.Create;
-begin
-  FInit := False;
-end;
-
 initialization
 
+BeginHooks;
 @TrampolineGetMemory := InterceptCreate(@GetMemory, @GetMemory_Hooked);
 @TrampolineFreeMemory := InterceptCreate(@FreeMemory, @FreeMemory_Hooked);
+EndHooks;
 
 finalization
 
+BeginUnHooks;
 InterceptRemove(@TrampolineGetMemory);
 InterceptRemove(@TrampolineFreeMemory);
+EndUnHooks;
 
 end.

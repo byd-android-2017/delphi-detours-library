@@ -57,22 +57,30 @@ end;
 procedure TMain.BtnEnableHookClick(Sender: TObject);
 begin
   if not Assigned(Trampoline_FileOpenDialog_Show) then
+  begin
+    BeginHooks;
     @Trampoline_FileOpenDialog_Show := InterceptCreate(FileOpenDialog, 3, @FileOpenDialog_Show_Hook);
-  Trampoline_FileOpenDialog_SetTitle := InterceptCreate(FileOpenDialog, 17, @FileOpenDialog_SetTitle_Hook);
+    @Trampoline_FileOpenDialog_SetTitle := InterceptCreate(FileOpenDialog, 17, @FileOpenDialog_SetTitle_Hook);
+    EndHooks;
+  end;
 end;
 
 procedure TMain.BtnDisableHookClick(Sender: TObject);
 begin
   if Assigned(Trampoline_FileOpenDialog_Show) then
   begin
+    BeginUnHooks;
     InterceptRemove(@Trampoline_FileOpenDialog_Show);
     Trampoline_FileOpenDialog_Show := nil;
+    InterceptRemove(@Trampoline_FileOpenDialog_SetTitle);
+    Trampoline_FileOpenDialog_SetTitle := nil;
+    EndUnHooks;
   end;
-  InterceptRemove(@Trampoline_FileOpenDialog_SetTitle)
+
 end;
 
 initialization
 
-FileOpenDialog := CreateComObject(CLSID_FileOpenDialog) as IFileOpenDialog;
+  FileOpenDialog := CreateComObject(CLSID_FileOpenDialog) as IFileOpenDialog;
 
 end.

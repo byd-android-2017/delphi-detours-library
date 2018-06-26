@@ -3,13 +3,14 @@ The **Delphi Detours Library** is a library allowing you to hook Delphi and Wind
 ## What's new in Version 2: ##
 Please check [Version2](https://github.com/MahdiSafsafi/delphi-detours-library/blob/wiki/Version2.md) wiki page
 ## Features : ##
+
   * Support **x86** and **x64** architecture.
-  * Allow calling the original function via <u><b>Trampoline</b></u> function.
-  * Support for <u><b>Multi Hook</b></u>.
-  * **COM**/**Interfaces**/**win32api** support.
+  * Allow calling the original function via **Trampoline** function.
+  * Support for **Multi Hook**.
+  * **COM**/**Interfaces**/**Win32api** support.
   * Support hooking interfaces methods by **MethodName** or **MethodIndex**.
   * Support COM **vtable** patching.
-  * Fully <u><b>thread-safe</b></u> code hooking and unhooking.
+  * Fully **thread-safe** code hooking and unhooking.
   * Support hooking Object Method.
   * Support Delphi 7/2005-2010/XE-XE8.
   * Support Lazarus/FPC.

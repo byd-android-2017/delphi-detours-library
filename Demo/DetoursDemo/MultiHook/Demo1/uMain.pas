@@ -38,7 +38,8 @@ implementation
 {$R *.dfm}
 
 type
-  TMsgBoxNextHookProc = function(hWnd: hWnd; lpText, lpCaption: LPCWSTR; uType: UINT): Integer; stdcall;
+  TMsgBoxNextHookProc = function(hWnd: hWnd; lpText, lpCaption: LPCWSTR; //
+      uType: UINT): Integer; stdcall;
 
 var
   NextHook1: TMsgBoxNextHookProc = nil;
@@ -63,24 +64,36 @@ begin
   Result := NextHook3(hWnd, lpText, lpText, uType);
 end;
 
+{
+  Enable Hook1
+}
 procedure TMain.BtnEnableHook1Click(Sender: TObject);
 begin
   if not Assigned(NextHook1) then
     @NextHook1 := InterceptCreate(@MessageBox, @MessageBox_Hook1);
 end;
 
+{
+ Enable Hook2
+}
 procedure TMain.BtnEnableHook2Click(Sender: TObject);
 begin
   if not Assigned(NextHook2) then
     @NextHook2 := InterceptCreate(@MessageBox, @MessageBox_Hook2);
 end;
 
+{
+ Enable Hook2
+}
 procedure TMain.BtnEnableHook3Click(Sender: TObject);
 begin
   if not Assigned(NextHook3) then
     @NextHook3 := InterceptCreate(@MessageBox, @MessageBox_Hook3);
 end;
 
+{
+  Remove Hook1
+}
 procedure TMain.BtnRemoveHook1Click(Sender: TObject);
 begin
   if Assigned(NextHook1) then
@@ -90,6 +103,9 @@ begin
   end;
 end;
 
+{
+  Remove Hook2
+}
 procedure TMain.BtnRemoveHook2Click(Sender: TObject);
 begin
   if Assigned(NextHook2) then
@@ -99,6 +115,9 @@ begin
   end;
 end;
 
+{
+  Remove Hook3
+}
 procedure TMain.BtnRemoveHook3Click(Sender: TObject);
 begin
   if Assigned(NextHook3) then
@@ -108,6 +127,9 @@ begin
   end;
 end;
 
+{
+  Test
+}
 procedure TMain.BtnTestClick(Sender: TObject);
 begin
   MemLog.Lines.Add('----------------------------');

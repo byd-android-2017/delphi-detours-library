@@ -24,7 +24,7 @@ object Main: TMain
     OnClick = BtnHookClick
   end
   object BtnUnHook: TButton
-    Left = 16
+    Left = 8
     Top = 88
     Width = 153
     Height = 25

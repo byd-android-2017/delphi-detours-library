@@ -36,7 +36,18 @@ var
   S: String;
 begin
   S := 'Hooked _' + String(Buffer);
-  TrampolineSetTextBuf(Self, PChar(S)); // Call the original function .
+  // Call the original function .
+  TrampolineSetTextBuf(Self, PChar(S));
+end;
+
+{
+  TMain
+}
+
+procedure TMain.BtnEnableHookClick(Sender: TObject);
+begin
+  Edit1.Text := 'Enter new text ..';
+  @TrampolineSetTextBuf := InterceptCreate(@TControl.SetTextBuf, @SetTextBufHooked);
 end;
 
 procedure TMain.BtnDisableHookClick(Sender: TObject);
@@ -46,12 +57,6 @@ begin
     InterceptRemove(@TrampolineSetTextBuf);
     TrampolineSetTextBuf := nil;
   end;
-end;
-
-procedure TMain.BtnEnableHookClick(Sender: TObject);
-begin
-  Edit1.Text := 'Enter new text ..';
-  @TrampolineSetTextBuf := InterceptCreate(@TControl.SetTextBuf, @SetTextBufHooked);
 end;
 
 procedure TMain.BtnClickMeClick(Sender: TObject);

@@ -19,7 +19,7 @@ object Main: TMain
     Top = 90
     Width = 151
     Height = 25
-    Caption = 'BtnEnableHook'
+    Caption = 'Enable Hook'
     TabOrder = 0
     OnClick = BtnEnableHookClick
   end
@@ -28,7 +28,7 @@ object Main: TMain
     Top = 116
     Width = 151
     Height = 25
-    Caption = 'BtnDisableHook'
+    Caption = 'Disable Hook'
     TabOrder = 1
     OnClick = BtnDisableHookClick
   end

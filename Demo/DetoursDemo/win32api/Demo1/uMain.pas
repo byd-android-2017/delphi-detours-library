@@ -3,8 +3,9 @@ unit uMain;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, DDetours;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  DDetours;
 
 type
   TMain = class(TForm)
@@ -28,13 +29,18 @@ implementation
 {$R *.dfm}
 
 var
-  TrampolineMessageBoxW: function(hWnd: hWnd; lpText, lpCaption: LPCWSTR; uType: UINT): Integer;
-stdcall = nil;
+  TrampolineMessageBoxW: function(hWnd: hWnd; lpText, lpCaption: LPCWSTR; //
+     uType: UINT): Integer; stdcall = nil;
 
-function InterceptMessageBoxW(hWnd: hWnd; lpText, lpCaption: LPCWSTR; uType: UINT): Integer; stdcall;
+function InterceptMessageBoxW(hWnd: hWnd; lpText, lpCaption: LPCWSTR; //
+   uType: UINT): Integer; stdcall;
 begin
   Result := TrampolineMessageBoxW(hWnd, 'Hooked', 'Hooked', MB_OK or MB_ICONEXCLAMATION);
 end;
+
+{
+  Hook MessageBox
+}
 
 procedure TMain.BtnHookClick(Sender: TObject);
 begin
@@ -44,10 +50,18 @@ begin
   end;
 end;
 
+{
+  Call MessageBox
+}
+
 procedure TMain.BtnTestMsgBoxClick(Sender: TObject);
 begin
   MessageBoxW(Handle, 'Text', 'Caption', MB_OK);
 end;
+
+{
+  UnHook MessageBox
+}
 
 procedure TMain.BtnUnHookClick(Sender: TObject);
 begin
